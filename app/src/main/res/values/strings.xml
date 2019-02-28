@@ -1,3 +1,75 @@
 <resources>
-    <string name="app_name">LYAPP</string>
+    <string name="app_name">蓝云E+</string>
+    <string name="action_settings">Settings</string>
+    <string name="copyright">© 浙江蓝云信息科技股份有限公司</string>
+    <string name="connect_setup">连接设置</string>
+    <string name="bind_success">绑定成功</string>
+    <string name="login_success">登录成功</string>
+    <string name="login">登录</string>
+    <string name="cinnectsetup">连接设置</string>
+    <string name="input_customer_number">请您输入企业号</string>
+    <string name="input_username">请您输入用户名</string>
+    <string name="input_password">请您输入密码</string>
+    <string name="submit_success">提交成功</string>
+    <string name="submit">提交</string>
+    <string name="scan_tips">将条码/二维码对准扫描框，即可自动扫描</string>
+    <string name="update_msg">正在更新中...</string>
+    <string name="update_success">更新成功</string>
+    <!-- error -->
+    <string name="error_update">参数配置出错</string>
+    <string name="error_please_check_network">请检查网络。</string>
+    <string name="error_timeout">请求超时，网络不好或者服务器不稳定。</string>
+    <string name="error_not_found_server">未发现指定服务器，请切换网络后重试。</string>
+    <string name="error_url_error">URL错误。</string>
+    <string name="error_not_found_cache">没有找到缓存.</string>
+    <string name="error_system_unsupport_method">系统不支持的请求方法。</string>
+    <string name="error_parse_data_error">解析数据时发生错误。</string>
+    <string name="error_unknow">未知错误。</string>
+    <string name="error_response_code">服务器响应码%1$d</string>
+    <string name="error_response_code_dex">服务器响应码%1$d，如果你们服务器在这种情况下也返回数据你可以处理。</string>
+    <string name="error_view_type">视图类型错误</string>
+    <string name="error_app_crash">抱歉,程序出现异常,即将重启.</string>
+    <string name="error_scan">扫描失败</string>
+    <string name="error_empower">拒绝授权</string>
+    <string name="error_header_nodata">条码表头无数据</string>
+    <string name="error_chosebills">重复扫码或者无数据</string>
+    <string name="error_getDefault">获取默认值失败，请重新打开单据！</string>
+    <string name="error_xgbindaccount">消息推送服务注册失败，请尝试重新登陆！</string>
+
+    <string name="error_userchannelempty">用户名不能为空！</string>
+    <!-- RequestMethod -->
+    <string name="request_json_result">请求方法：%1$s\n请求地址：%2$s\n响应数据：%3$s\n业务状态码：%4$s。</string>
+    <string name="request_succeed_head">请求成功, 请求方式为HEAD, 没有响应内容。</string>
+    <string name="request_method_not_allow">请求的方法被不服务器允许。</string>
+    <string name="request_method_head">请求方法为HEAD，没有响应内容。</string>
+
+    <string name="request_succeed">请求成功</string>
+    <string name="request_failed">请求失败</string>
+
+
+    <string name="Username">用户名</string>
+    <string name="Password">密码</string>
+    <string name="server_ip">服务器IP</string>
+    <string name="server_count">端口</string>
+    <string name="go">登录</string>
+
+    <string name="update_config">更新</string>
+    <string name="register">更新配置</string>
+
+    <string name="username">员工：</string>
+    <string name="usernumber">员工代码：</string>
+
+
+    <!--测试使用-->
+    <string name="tab_1">Label 1</string>
+    <string name="tab_2">Label 2</string>
+    <string name="tab_3">Label 3</string>
+    <string name="tab_4">Label 4</string>
+    <string name="tab_5">Label 5</string>
+
+    <string name="menu_1">菜单1</string>
+    <string name="menu_2">菜单2</string>
+    <string name="menu_3">菜单3</string>
+    <string name="menu_4">菜单4</string>
+    <string name="menu_5">菜单5</string>
 </resources>
