@@ -2,6 +2,7 @@ package com.zjlanyun.lyapp.adapter;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -55,20 +56,20 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 break;
             case TYPE_LEVEL_1:
                 final Level1Item lv1 = (Level1Item) item;
-                holder.setText(R.id.tv, lv1.title + " parent pos: " + getParentPosition(lv1));
+                holder.setText(R.id.tv, "ID: "+lv1.model_id + "\nName: " + lv1.model_name);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int pos = holder.getAdapterPosition();
-                        // 先获取到当前 item 的父 positon，再移除自己
-                        int positionAtAll = getParentPositionInAll(pos);
-                        remove(pos);
-                        if (positionAtAll != -1) {
-                            IExpandable multiItemEntity = (IExpandable) getData().get(positionAtAll);
-                            if (!hasSubItems(multiItemEntity)) {
-                                remove(positionAtAll);
-                            }
-                        }
+//                        int pos = holder.getAdapterPosition();
+//                        // 先获取到当前 item 的父 positon，再移除自己
+//                        int positionAtAll = getParentPositionInAll(pos);
+//                        remove(pos);
+//                        if (positionAtAll != -1) {
+//                            IExpandable multiItemEntity = (IExpandable) getData().get(positionAtAll);
+//                            if (!hasSubItems(multiItemEntity)) {
+//                                remove(positionAtAll);
+//                            }
+//                        }
                     }
                 });
                 break;

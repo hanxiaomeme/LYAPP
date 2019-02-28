@@ -4,22 +4,22 @@
         <item
             android:id="@+id/nav_call"
             android:icon="@drawable/update_icon_48dp"
-            android:title="Call" />
+            android:title="A" />
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/update_icon_48dp"
-            android:title="Friends" />
+            android:title="B" />
         <item
             android:id="@+id/nav_location"
             android:icon="@drawable/update_icon_48dp"
-            android:title="Location" />
+            android:title="C" />
         <item
             android:id="@+id/nav_mail"
             android:icon="@drawable/update_icon_48dp"
-            android:title="Mail" />
+            android:title="D" />
         <item
             android:id="@+id/nav_task"
             android:icon="@drawable/update_icon_48dp"
-            android:title="Tasks" />
+            android:title="E" />
     </group>
 </menu>

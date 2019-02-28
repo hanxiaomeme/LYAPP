@@ -9,12 +9,12 @@ import com.zjlanyun.lyapp.adapter.ExpandableItemAdapter;
  */
 
 public class Level1Item  implements MultiItemEntity {
-    public String title;
-    public String subTitle;
+    public String model_id;
+    public String model_name;
 
-    public Level1Item(String title, String subTitle) {
-        this.subTitle = subTitle;
-        this.title = title;
+    public Level1Item(String model_id, String model_name) {
+        this.model_id = model_id;
+        this.model_name = model_name;
     }
 
     @Override

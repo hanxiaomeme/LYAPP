@@ -39,8 +39,6 @@ public class SecondFragment extends Fragment {
     ArrayList<MultiItemEntity> list;
     private Context mContext = getActivity();
     Unbinder unbinder;
-    @BindView(R.id.title)
-    TextView title;
     @BindView(R.id.rv_list)
     RecyclerView rvList;
 
@@ -94,22 +92,10 @@ public class SecondFragment extends Fragment {
             List<IrUiMenu> menuList = Common.getApiIrMenuTable(getContext(),"packet_id = "+typeList.get(i) + " and active = 1 ");
             for (int j = 0; j < menuList.size(); j++) {
                 IrUiMenu item = menuList.get(j);
-                lv0.addSubItem(new Level1Item(item.getName(), ""));
+                lv0.addSubItem(new Level1Item(item.getId()+"", item.getName()));
             }
             res.add(lv0);
         }
-
-
-//        String[] menuList = {"入库", "出库", "调拨", "盘点", "任务单"};
-//        ArrayList<MultiItemEntity> res = new ArrayList<>();
-//
-//        for (int i = 0; i < lv0Count; i++) {
-//            Level0Item lv0 = new Level0Item("This is " + i + "th item in Level 0", "subtitle of " + i);
-//            for (int k = 0; k < lv1Count; k++) {
-//                lv0.addSubItem(new Level1Item(menuList[k], ""));
-//            }
-//            res.add(lv0);
-//        }
 
         return res;
     }
