@@ -21,7 +21,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     private static final String TAG = ExpandableItemAdapter.class.getSimpleName();
 
     public static final int TYPE_LEVEL_0 = 0;//主目录
-    public static final int TYPE_LEVEL_1 = 1;//子目录
+    public static final int TYPE_LEVEL_1 = 1;//一级子目录
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
