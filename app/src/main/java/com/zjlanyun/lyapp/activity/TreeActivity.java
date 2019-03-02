@@ -1,0 +1,14 @@
+package com.zjlanyun.lyapp.activity;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.zjlanyun.lyapp.R;
+
+public class TreeActivity extends BaseActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tree);
+    }
+}
