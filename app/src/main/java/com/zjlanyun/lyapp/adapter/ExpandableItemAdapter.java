@@ -19,6 +19,10 @@ import java.util.logging.Logger;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_ACTID;
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_BILLSNAME;
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_MODELID;
+
 /**
  * Created by MDZZ on 2019-02-27.
  */
@@ -66,6 +70,10 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                         else{
                             Toasty.info(mContext,"进入列表页",Toast.LENGTH_LONG,true).show();
+                            Intent intent = new Intent(mContext, TreeActivity.class);
+                            intent.putExtra(ACTIVITY_INTENT_BILLSNAME,lv0.title);
+                            intent.putExtra(ACTIVITY_INTENT_ACTID,lv0.act_id);
+                            mContext.startActivity(intent);
                         }
 
 
@@ -98,6 +106,10 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                         else{
                             Toasty.info(mContext,"进入列表页",Toast.LENGTH_LONG,true).show();
+                            Intent intent = new Intent(mContext, TreeActivity.class);
+                            intent.putExtra(ACTIVITY_INTENT_BILLSNAME,lv1.title);
+                            intent.putExtra(ACTIVITY_INTENT_ACTID,lv1.act_id);
+                            mContext.startActivity(intent);
                         }
                     }
                 });
@@ -109,8 +121,10 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                     @Override
                     public void onClick(View view) {
                         Toasty.info(mContext,"进入列表页",Toast.LENGTH_LONG,true).show();
-//                        Intent intent = new Intent(mContext, TreeActivity.class);
-//                        mContext.startActivity(intent);
+                        Intent intent = new Intent(mContext, TreeActivity.class);
+                        intent.putExtra(ACTIVITY_INTENT_BILLSNAME,lvEnd.title);
+                        intent.putExtra(ACTIVITY_INTENT_ACTID,lvEnd.act_id);
+                        mContext.startActivity(intent);
                     }
                 });
                 break;

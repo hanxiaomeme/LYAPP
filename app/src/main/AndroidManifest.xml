@@ -33,7 +33,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".activity.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,8 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:theme="@style/Translucent" />
-        <activity android:name=".activity.TreeActivity"></activity>
+        <activity android:name=".activity.TreeActivity" />
+        <activity android:name=".activity.FormActivity"></activity>
     </application>
 
 </manifest>

@@ -16,22 +16,22 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.aihook.progressview.library.ProgressViewDialog;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.Response;
 import com.zjlanyun.lyapp.R;
 import com.zjlanyun.lyapp.common.Common;
+import com.zjlanyun.lyapp.config.SPConfig;
 import com.zjlanyun.lyapp.http.HttpRequest;
 import com.zjlanyun.lyapp.http.SimpleHttpListener;
+import com.zjlanyun.lyapp.utils.SPData;
 
 import org.json.JSONObject;
-
-import java.util.Observable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -44,15 +44,15 @@ public class RegisterActivity extends BaseActivity {
     CardView cvAdd;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-    @BindView(R.id.et_password)
-    EditText etPassword;
-    @BindView(R.id.server_count)
-    EditText serverCount;
 
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.bt_update)
     Button btUpdate;
+    @BindView(R.id.et_server_ip)
+    EditText etServerIp;
+    @BindView(R.id.server_port)
+    EditText etServerPort;
 
     private Context mContext = this;
     private String server_ip = "";
@@ -64,21 +64,30 @@ public class RegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
         ShowEnterAnimation();
+        setDefaultValue();
+    }
+
+    private void setDefaultValue() {
+        server_ip = SPData.getConfig().getString(SPConfig.SP_SERVER_IP);
+        server_port = SPData.getConfig().getString(SPConfig.SP_SERVER_PORT);
+        etServerIp.setText(server_ip);
+        etServerPort.setText(server_port);
     }
 
     /**
      * 更新配置
      */
     public void updateSetting() {
+
         btUpdate.setText(getString(R.string.update_msg));
         progressBar.setVisibility(View.VISIBLE);
         btUpdate.setEnabled(false);
-        HttpRequest client = new HttpRequest(mContext, URL_UPDATESETTING_TEST, RequestMethod.GET,false);
+        HttpRequest client = new HttpRequest(mContext, URL_UPDATESETTING_TEST, RequestMethod.GET, false);
         client.send(new SimpleHttpListener<JSONObject>() {
             @Override
             public void onSucceed(int what, final Response<JSONObject> response) {
                 super.onSucceed(what, response);
-                rx.Observable.create(new rx.Observable.OnSubscribe<String>() {
+                Observable.create(new Observable.OnSubscribe<String>() {
                     @Override
                     public void call(Subscriber<? super String> subscriber) {
                         Common.updateSetting(response.get(), mContext);
@@ -91,6 +100,8 @@ public class RegisterActivity extends BaseActivity {
                         btUpdate.setText(getString(R.string.update_config));
                         progressBar.setVisibility(View.GONE);
                         btUpdate.setEnabled(true);
+                        SPData.getConfig().put(SPConfig.SP_SERVER_IP,etServerIp.getText().toString());
+                        SPData.getConfig().put(SPConfig.SP_SERVER_PORT,etServerPort.getText().toString());
                     }
 
                     @Override
@@ -197,7 +208,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.fab,R.id.bt_update})
+    @OnClick({R.id.fab, R.id.bt_update})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_update:

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.Request;
+import com.zjlanyun.lyapp.config.SPConfig;
 import com.zjlanyun.lyapp.utils.SPData;
 
 import org.json.JSONObject;
@@ -132,8 +133,8 @@ public class HttpRequest {
     }
 
     public void setDefault() {
-        request.add("username", SPData.getUserinfo().getString("username", ""));
-        request.add("password", SPData.getUserinfo().getString("password", ""));
+        request.add("username", SPData.getUserinfo().getString(SPConfig.SP_UID, ""));
+        request.add("password", SPData.getUserinfo().getString(SPConfig.SP_PWD, ""));
         request.add("usertype", SPData.getUserinfo().getString("usertype",USER_TYPE_INTERIOR));
     }
 

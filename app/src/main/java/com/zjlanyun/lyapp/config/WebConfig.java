@@ -19,5 +19,8 @@ public class WebConfig {
     //APP获取菜单
     public static final String URL_GETAPPMENU = "http://192.168.1.99:53556/api/SysConfig/GetAppMenu";
 
+    //获取单据列表接口（测试）
+    public static final String URL_GETTREELIST = "http://192.168.1.195:66/api.aspx";
+
 
 }

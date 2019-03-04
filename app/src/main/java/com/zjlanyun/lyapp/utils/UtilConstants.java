@@ -11,10 +11,12 @@ package com.zjlanyun.lyapp.utils;
 public class UtilConstants {
 
 
-    public static final String USER_TYPE_INTERIOR = "interior";
-    public static final String USER_TYPE_CUSTOMER = "customer";
-    public static final String USER_TYPE_SUPPLIER = "suppler";
+    public static final String USER_TYPE_INTERIOR = "1";
+    public static final String USER_TYPE_CUSTOMER = "2";
+    public static final String USER_TYPE_SUPPLIER = "3";
 
 
-
+    public static final String ACTIVITY_INTENT_BILLSNAME = "bills_name";
+    public static final String ACTIVITY_INTENT_MODELID = "model_id";
+    public static final String ACTIVITY_INTENT_ACTID = "act_id";
 }

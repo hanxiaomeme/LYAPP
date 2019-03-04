@@ -7,11 +7,14 @@ import com.alibaba.fastjson.JSON;
 import com.zjlanyun.lyapp.R;
 import com.zjlanyun.lyapp.config.SPConfig;
 import com.zjlanyun.lyapp.greendao.IrActWindow;
+import com.zjlanyun.lyapp.greendao.IrActWindowDao;
 import com.zjlanyun.lyapp.greendao.IrConfig;
 import com.zjlanyun.lyapp.greendao.IrExtend;
 import com.zjlanyun.lyapp.greendao.IrModel;
 import com.zjlanyun.lyapp.greendao.IrModelFields;
+import com.zjlanyun.lyapp.greendao.IrModelFieldsDao;
 import com.zjlanyun.lyapp.greendao.IrSearchFields;
+import com.zjlanyun.lyapp.greendao.IrSearchFieldsDao;
 import com.zjlanyun.lyapp.greendao.IrUiMenu;
 import com.zjlanyun.lyapp.greendao.IrUiMenuDao;
 import com.zjlanyun.lyapp.utils.DBHelper;
@@ -141,6 +144,54 @@ public class Common {
         return new ArrayList(new HashSet(typeList));
     }
 
+    /**
+     * 获取模型内的字段
+     * @param mContext
+     * @param model_id 模型ID
+     * @return
+     */
+    public static List<IrModelFields>  getirModelFieldsList(Context mContext,long model_id){
+        QueryBuilder<IrModelFields> qb = DBHelper.getDaoSession(mContext).getIrModelFieldsDao().queryBuilder();
+        qb.where(IrModelFieldsDao.Properties.Model_id.eq(model_id), IrModelFieldsDao.Properties.View_type.eq("tree"))
+                .orderAsc(IrModelFieldsDao.Properties.Sequence);
+        return qb.list();
+    }
 
 
+    /**
+     * 获取搜索字段
+     * @param mContext
+     * @param act_id s视图ID
+     * @return
+     */
+    public static List<IrSearchFields>  getIrSearchFields(Context mContext,int act_id){
+        QueryBuilder<IrSearchFields> qbSearch = DBHelper.getDaoSession(mContext).getIrSearchFieldsDao().queryBuilder();
+        qbSearch.where(IrSearchFieldsDao.Properties.Act_id.eq(act_id)).orderAsc(IrSearchFieldsDao.Properties.Sequence);
+        return qbSearch.list();
+    }
+
+
+    /**
+     * 根据act_id获取model_id
+     * @param mContext
+     * @param act_id s视图ID
+     * @return
+     */
+    public static long  getModelId(Context mContext,int act_id){
+        IrActWindow irActWindow = DBHelper.getDaoSession(mContext).getIrActWindowDao().load((long) act_id);
+        return irActWindow.getModel_id();
+    }
+
+
+    /**
+     * 根据act_id获取视图名称
+     * @param mContext
+     * @param act_id
+     * @return
+     */
+    public static List<IrActWindow>  getIrActWindowNameByID (Context mContext,int act_id){
+        QueryBuilder<IrActWindow> qbIrActWindow = DBHelper.getDaoSession(mContext).getIrActWindowDao().queryBuilder();
+        qbIrActWindow.where(IrActWindowDao.Properties.Id.eq(act_id)).orderAsc(IrActWindowDao.Properties.Id);
+        return qbIrActWindow.list();
+    }
 }

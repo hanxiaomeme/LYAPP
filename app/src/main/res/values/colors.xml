@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="red">#ff0900</color>
     <color name="white">#ffffff</color>
+    <color name="border">#C6C7C9</color>
     <!-- 测试使用 -->
 
     <color name="color_tab_1">#455C65</color>

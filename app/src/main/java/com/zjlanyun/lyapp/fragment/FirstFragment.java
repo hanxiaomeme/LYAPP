@@ -69,7 +69,6 @@ public class FirstFragment extends Fragment {
         homeAdapter.openLoadAnimation();
         homeAdapter.setNotDoAnimationCount(3);
         homeAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
