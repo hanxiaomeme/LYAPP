@@ -46,7 +46,8 @@
             android:name=".activity.RegisterActivity"
             android:theme="@style/Translucent" />
         <activity android:name=".activity.TreeActivity" />
-        <activity android:name=".activity.FormActivity"></activity>
+        <activity android:name=".activity.FormActivity" />
+        <activity android:name=".activity.CaptureActivity"></activity>
     </application>
 
 </manifest>

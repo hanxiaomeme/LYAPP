@@ -17,6 +17,10 @@
     <string name="update_success">更新成功</string>
     <string name="btn_post">提交</string>
     <string name="btn_add">新增</string>
+    <string name="msg_delete_bill">确认要删除该条单据吗？</string>
+    <string name="msg_delete_suc">删除成功！</string>
+    <string name="btn_sure">确认</string>
+    <string name="btn_cancel">取消</string>
     <!-- error -->
     <string name="error_update">参数配置出错</string>
     <string name="error_please_check_network">请检查网络。</string>
@@ -37,7 +41,7 @@
     <string name="error_chosebills">重复扫码或者无数据</string>
     <string name="error_getDefault">获取默认值失败，请重新打开单据！</string>
     <string name="error_xgbindaccount">消息推送服务注册失败，请尝试重新登陆！</string>
-
+    <string name="error_PrimaryKeyUnFound">未获得主键字段，请检查是否配置！</string>
     <string name="error_userchannelempty">用户名不能为空！</string>
     <!-- RequestMethod -->
     <string name="request_json_result">请求方法：%1$s\n请求地址：%2$s\n响应数据：%3$s\n业务状态码：%4$s。</string>

@@ -19,4 +19,9 @@ public class UtilConstants {
     public static final String ACTIVITY_INTENT_BILLSNAME = "bills_name";
     public static final String ACTIVITY_INTENT_MODELID = "model_id";
     public static final String ACTIVITY_INTENT_ACTID = "act_id";
+    public static final String ACTIVITY_INTENT_ACTION = "action";
+
+    public static final int ACTIVITY_PHONE_SCANQRCODE = 1;
+    public static final int REQUESTCODE_CREATE = 2;
+
 }

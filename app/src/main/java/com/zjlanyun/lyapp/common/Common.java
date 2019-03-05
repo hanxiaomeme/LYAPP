@@ -194,4 +194,21 @@ public class Common {
         qbIrActWindow.where(IrActWindowDao.Properties.Id.eq(act_id)).orderAsc(IrActWindowDao.Properties.Id);
         return qbIrActWindow.list();
     }
+
+    /**
+     * 获取主键行所有数据
+     * @param mContext
+     * @param model_id
+     * @param type 表头/表体  terr/form
+     */
+    public static IrModelFields getPrimaryKey(Context mContext,long model_id,String type){
+        QueryBuilder<IrModelFields> qb2 = DBHelper.getDaoSession(mContext).getIrModelFieldsDao().queryBuilder();
+        qb2.where(IrModelFieldsDao.Properties.Model_id.eq(model_id), IrModelFieldsDao.Properties.View_type.eq(type),
+                IrModelFieldsDao.Properties.Primary_key.eq(1)).limit(1);
+        if (qb2.list().size() < 0){
+            Toasty.error(mContext,mContext.getString(R.string.error_PrimaryKeyUnFound),Toast.LENGTH_LONG,true).show();
+            return null;
+        }
+        return qb2.list().get(0);
+    }
 }

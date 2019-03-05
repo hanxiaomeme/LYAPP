@@ -112,7 +112,10 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
                     callback.onSucceed(what, response);
                 }
                 else if (jsonObject.optInt("code") == 1){
-                    Toasty.error(mContext, jsonObject.optString("msg"), Toast.LENGTH_SHORT, true).show();
+                    if (!jsonObject.optString("msg").isEmpty())
+                        Toasty.error(mContext, jsonObject.optString("msg"), Toast.LENGTH_SHORT, true).show();
+                    else
+                        Toasty.error(mContext, jsonObject.optString("message"), Toast.LENGTH_SHORT, true).show();
                     callback.onFailed(what, response);
                 }
             }

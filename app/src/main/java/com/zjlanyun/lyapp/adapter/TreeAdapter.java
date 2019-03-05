@@ -31,6 +31,11 @@ public class TreeAdapter extends BaseQuickAdapter<HashMap<String, Object>, BaseV
 
 
     public TreeAdapter(int layoutResId, @Nullable List<HashMap<String, Object>> data, List<IrModelFields> irModelFieldsList) {
+
+        super(layoutResId, data);
+        this.irModelFieldsList = irModelFieldsList;
+    }
+    public TreeAdapter(int layoutResId, @Nullable List<HashMap<String, Object>> data) {
         super(layoutResId, data);
         this.irModelFieldsList = irModelFieldsList;
     }
@@ -44,29 +49,9 @@ public class TreeAdapter extends BaseQuickAdapter<HashMap<String, Object>, BaseV
         this.title = title;
     }
 
-    public void addData(List<HashMap<String, Object>> mList) {
-        super.addData(mList);
-    }
 
-    public void loadMoreComplete() {
-        super.loadMoreComplete();
-    }
 
-    public void loadMoreEnd() {
-        super.loadMoreEnd();
-    }
 
-    public void loadMoreFail() {
-        super.loadMoreFail();
-    }
-
-    public void setEnableLoadMore(boolean b) {
-        super.setEnableLoadMore(b);
-    }
-
-    public void addNewData(List<HashMap<String, Object>> mList){
-        super.setNewData(mList);
-    }
     @Override
     protected void convert(BaseViewHolder helper, HashMap<String, Object> item) {
         int index = 1; //当前布局列
@@ -74,7 +59,7 @@ public class TreeAdapter extends BaseQuickAdapter<HashMap<String, Object>, BaseV
         ((LinearLayout) helper.getView(R.id.item)).removeAllViews();
         ((TextView)helper.getView(R.id.tx_no)).setText("NO."+(helper.getAdapterPosition()+1)+"  "+title);
         ((TextView)helper.getView(R.id.tx_title)).setText(title);
-        if (item.containsKey("FStatus") && item.get("FStatus").toString() != "已审核"){
+        if (item.containsKey("FStatus") && !item.get("FStatus").toString().equals("已审核") ){
             ((TextView)helper.getView(R.id.tx_title)).setVisibility(View.VISIBLE);
         }
         else {
@@ -124,6 +109,7 @@ public class TreeAdapter extends BaseQuickAdapter<HashMap<String, Object>, BaseV
                 }
             }
         }
+
     }
 
 

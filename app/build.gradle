@@ -71,4 +71,8 @@ dependencies {
 
     //日志
     compile 'com.orhanobut:logger:2.1.1'
+
+    //ZXing扫描生成二维码
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
 }

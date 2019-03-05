@@ -3,6 +3,7 @@ package com.zjlanyun.lyapp.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -10,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -24,18 +27,27 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aihook.alertview.AlertView;
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.orhanobut.logger.Logger;
 import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 import com.zjlanyun.lyapp.R;
 import com.zjlanyun.lyapp.adapter.TreeAdapter;
+import com.zjlanyun.lyapp.greendao.IrActWindow;
 import com.zjlanyun.lyapp.greendao.IrModelFields;
 import com.zjlanyun.lyapp.greendao.IrSearchFields;
 import com.zjlanyun.lyapp.http.HttpRequest;
 import com.zjlanyun.lyapp.http.SimpleHttpListener;
+import com.zjlanyun.lyapp.utils.ButtonUtils;
+import com.zjlanyun.lyapp.utils.DBHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,10 +65,21 @@ import es.dmoral.toasty.Toasty;
 import static com.zjlanyun.lyapp.common.Common.getIrActWindowNameByID;
 import static com.zjlanyun.lyapp.common.Common.getIrSearchFields;
 import static com.zjlanyun.lyapp.common.Common.getModelId;
+import static com.zjlanyun.lyapp.common.Common.getPrimaryKey;
 import static com.zjlanyun.lyapp.common.Common.getirModelFieldsList;
+import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_CREATE;
+import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_DELETE;
 import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_GETTREEDATE;
+import static com.zjlanyun.lyapp.config.ActionConfig.VIEW_TYPE_FORM;
+import static com.zjlanyun.lyapp.config.ActionConfig.VIEW_TYPE_TREE;
+import static com.zjlanyun.lyapp.config.WebConfig.SERVER_IP;
 import static com.zjlanyun.lyapp.config.WebConfig.URL_GETTREELIST;
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_ACTID;
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_ACTION;
 import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_BILLSNAME;
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_MODELID;
+import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_PHONE_SCANQRCODE;
+import static com.zjlanyun.lyapp.utils.UtilConstants.REQUESTCODE_CREATE;
 
 
 public class TreeActivity extends BaseActivity {
@@ -93,8 +116,9 @@ public class TreeActivity extends BaseActivity {
     private boolean isMore = true;//是否有更多数据
     private int page = 1;//当前页
     private List<IrModelFields> irModelFieldsList;
+    private IrActWindow irActWindow;
     private TreeAdapter treeAdapter;
-    GridLayoutManager gridLayoutManager;
+    private GridLayoutManager gridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +150,8 @@ public class TreeActivity extends BaseActivity {
         model_id = getModelId(TreeActivity.this, act_id);
         //获取模型内的字段
         irModelFieldsList = getirModelFieldsList(TreeActivity.this, model_id);
+        //获取视图
+        irActWindow = DBHelper.getDaoSession(mContext).getIrActWindowDao().load((long) act_id);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -151,11 +177,22 @@ public class TreeActivity extends BaseActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     int lastVisiblePosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastVisiblePosition >= gridLayoutManager.getItemCount() - 1) {
-                        Logger.t(TAG).d("自动加载数据...当前是否正在加载:" + isLoading + "，是否有更多页数需要加载：" + isMore);
-
                         getData();
                     }
                 }
+            }
+        });
+        treeAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                onLongClickItem(position);
+                return false;
+            }
+        });
+        treeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toasty.info(mContext, "点击！", Toast.LENGTH_SHORT, true).show();
             }
         });
     }
@@ -168,6 +205,7 @@ public class TreeActivity extends BaseActivity {
                 showSearchWindow(toolbar);
                 break;
             case R.id.menu_add:
+                onCreateBill();
                 break;
             case android.R.id.home:
                 finish();
@@ -199,7 +237,6 @@ public class TreeActivity extends BaseActivity {
                 fieldsMap.put(irSearchFields.getId(), irSearchFields); //加入到全局字段hashmap中
                 searchValue.put(irSearchFields.getName(), "");
                 search_layout.addView(item);
-
                 at_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View view, boolean b) {
@@ -227,7 +264,7 @@ public class TreeActivity extends BaseActivity {
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if (irSearchFields.getScan()) {
-                            String deviceModel = Build.MODEL;
+                            currentFocusFieldsID = irSearchFields.getId();
                         }
                         return false;
                     }
@@ -241,6 +278,13 @@ public class TreeActivity extends BaseActivity {
                     btn_scan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            switch (DeviceUtils.getModel()) {
+                                case "APlus":
+                                    break;
+                                default:
+                                    scanQRcodeByPhone();
+                                    break;
+                            }
                         }
                     });
                 }
@@ -265,6 +309,58 @@ public class TreeActivity extends BaseActivity {
                 searchWindow.dismiss();
             }
         });
+    }
+
+    /**
+     * 新建单据
+     */
+    private void onCreateBill() {
+        if (irActWindow.getView_mode().indexOf(VIEW_TYPE_FORM) != -1) {
+            Intent intent = new Intent(mContext, FormActivity.class);
+            intent.putExtra(ACTIVITY_INTENT_MODELID, model_id);
+            intent.putExtra(ACTIVITY_INTENT_ACTION, ACTION_CREATE);
+            intent.putExtra(ACTIVITY_INTENT_ACTID, act_id);
+            startActivityForResult(intent, REQUESTCODE_CREATE);
+        }
+    }
+
+    /**
+     * 点击单据
+     */
+    private void onItemClick() {
+        if (irActWindow.getView_mode().indexOf(VIEW_TYPE_FORM) != -1) {
+            Intent intent = new Intent(mContext, FormActivity.class);
+            intent.putExtra(ACTIVITY_INTENT_MODELID, model_id);
+            intent.putExtra(ACTIVITY_INTENT_ACTION, ACTION_CREATE);
+            intent.putExtra(ACTIVITY_INTENT_ACTID, act_id);
+            startActivityForResult(intent, REQUESTCODE_CREATE);
+        }
+    }
+
+    //长按，删除
+    private void onLongClickItem(final int position) {
+        new AlertView(getString(R.string.app_name), getString(R.string.msg_delete_bill), getString(R.string.btn_cancel), new String[]{getString(R.string.btn_sure)},
+                null, mContext, AlertView.Style.Alert, new com.aihook.alertview.OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, final int p) {
+                if (p == 0) {
+                    HashMap<String, Object> param = new HashMap<>();
+                    param.put("model_id", model_id);
+                    param.put("key_name", getPrimaryKey(mContext, model_id, VIEW_TYPE_TREE).getName());
+                    param.put("key_value", mList.get(position).get(getPrimaryKey(mContext, model_id, VIEW_TYPE_TREE).getName()));
+                    HttpRequest httpRequest = new HttpRequest(mContext, URL_GETTREELIST, ACTION_DELETE, JSON.toJSONString(param),
+                            true, true);
+                    httpRequest.send(new SimpleHttpListener<JSONObject>() {
+                        @Override
+                        public void onSucceed(int what, Response<JSONObject> response) {
+                            super.onSucceed(what, response);
+                            Toasty.success(mContext, getString(R.string.msg_delete_suc), Toast.LENGTH_SHORT, true).show();
+                            treeAdapter.remove(position);
+                        }
+                    });
+                }
+            }
+        }).show();
     }
 
     //搜索开始
@@ -305,7 +401,7 @@ public class TreeActivity extends BaseActivity {
                 super.onSucceed(what, response);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mList.clear();
-                if (page == 1){
+                if (page == 1) {
                     treeAdapter.setNewData(null);
                 }
                 try {
@@ -371,4 +467,55 @@ public class TreeActivity extends BaseActivity {
         rvList.scrollToPosition(0);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ACTIVITY_PHONE_SCANQRCODE) { //RESULT_OK = -1
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString("result");
+            if (!TextUtils.isEmpty(scanResult)) {
+                ((AutoCompleteTextView) itemWidget.get(currentFocusFieldsID)).setText(scanResult);
+            }
+
+
+        }
+    }
+
+    /**
+     * 通过手机扫描二维码
+     */
+    private void scanQRcodeByPhone() {
+        getPermission();
+        Intent intent = new Intent(TreeActivity.this, CaptureActivity.class);
+        startActivityForResult(intent, ACTIVITY_PHONE_SCANQRCODE);
+    }
+
+    /**
+     * 获取相机权限
+     */
+    public void getPermission() {
+        final String[] permissionList = new String[]{
+                Permission.CAMERA
+        };
+        AndPermission.with(this)
+                .runtime()
+                .permission(permissionList)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        if (AndPermission.hasAlwaysDeniedPermission(mContext, permissionList)) {
+//                            setPermission();
+                        }
+                    }
+                })
+                .start();
+
+    }
 }
