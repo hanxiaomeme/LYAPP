@@ -75,4 +75,7 @@ dependencies {
     //ZXing扫描生成二维码
     compile 'com.google.zxing:core:3.2.1'
     compile 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
+
+    //表格
+    compile 'com.github.itrojan:TableView:v1.1.1'
 }

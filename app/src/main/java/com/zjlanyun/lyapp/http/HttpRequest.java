@@ -10,7 +10,7 @@ import com.zjlanyun.lyapp.utils.SPData;
 
 import org.json.JSONObject;
 
-import static com.zjlanyun.lyapp.utils.UtilConstants.USER_TYPE_INTERIOR;
+import static com.zjlanyun.lyapp.config.UtilConstants.USER_TYPE_INTERIOR;
 
 /**
  * @author: shun

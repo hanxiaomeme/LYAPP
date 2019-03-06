@@ -1,7 +1,6 @@
 package com.zjlanyun.lyapp.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,9 +8,9 @@ import android.os.Bundle;
 import com.zjlanyun.lyapp.BuildConfig;
 import com.zjlanyun.lyapp.R;
 
-import static com.zjlanyun.lyapp.utils.UtilConstants.USER_TYPE_CUSTOMER;
-import static com.zjlanyun.lyapp.utils.UtilConstants.USER_TYPE_INTERIOR;
-import static com.zjlanyun.lyapp.utils.UtilConstants.USER_TYPE_SUPPLIER;
+import static com.zjlanyun.lyapp.config.UtilConstants.USER_TYPE_CUSTOMER;
+import static com.zjlanyun.lyapp.config.UtilConstants.USER_TYPE_INTERIOR;
+import static com.zjlanyun.lyapp.config.UtilConstants.USER_TYPE_SUPPLIER;
 
 public class LaunchActivity extends AppCompatActivity {
     public static final String LogTag = "LaunchActivity";

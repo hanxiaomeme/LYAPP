@@ -211,4 +211,24 @@ public class Common {
         }
         return qb2.list().get(0);
     }
+
+
+    /**
+     * 判断表头表体是否有住建
+     * @param mContext
+     * @param viewType tree 表头  form 表体
+     * @param model_id
+     * @return
+     */
+    public static IrModelFields isFormView(Context mContext,String viewType,long model_id){
+        IrModelFields irModelFieldsKey;
+        QueryBuilder<IrModelFields> qb2 = DBHelper.getDaoSession(mContext).getIrModelFieldsDao().queryBuilder();
+        qb2.where(IrModelFieldsDao.Properties.Model_id.eq(model_id), IrModelFieldsDao.Properties.View_type.eq(viewType),
+                IrModelFieldsDao.Properties.Primary_key.eq(1)).limit(1);
+        if (qb2.list().size() > 0) {
+            irModelFieldsKey = qb2.list().get(0);
+            return irModelFieldsKey;
+        }
+        return null;
+    }
 }

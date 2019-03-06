@@ -1,7 +1,6 @@
 package com.zjlanyun.lyapp.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -33,7 +31,6 @@ import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.orhanobut.logger.Logger;
 import com.yanzhenjie.nohttp.rest.Response;
 import com.yanzhenjie.permission.Action;
@@ -41,12 +38,12 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.zjlanyun.lyapp.R;
 import com.zjlanyun.lyapp.adapter.TreeAdapter;
+import com.zjlanyun.lyapp.common.Common;
 import com.zjlanyun.lyapp.greendao.IrActWindow;
 import com.zjlanyun.lyapp.greendao.IrModelFields;
 import com.zjlanyun.lyapp.greendao.IrSearchFields;
 import com.zjlanyun.lyapp.http.HttpRequest;
 import com.zjlanyun.lyapp.http.SimpleHttpListener;
-import com.zjlanyun.lyapp.utils.ButtonUtils;
 import com.zjlanyun.lyapp.utils.DBHelper;
 
 import org.json.JSONArray;
@@ -70,16 +67,16 @@ import static com.zjlanyun.lyapp.common.Common.getirModelFieldsList;
 import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_CREATE;
 import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_DELETE;
 import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_GETTREEDATE;
+import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_READ;
 import static com.zjlanyun.lyapp.config.ActionConfig.VIEW_TYPE_FORM;
 import static com.zjlanyun.lyapp.config.ActionConfig.VIEW_TYPE_TREE;
-import static com.zjlanyun.lyapp.config.WebConfig.SERVER_IP;
 import static com.zjlanyun.lyapp.config.WebConfig.URL_GETTREELIST;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_ACTID;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_ACTION;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_BILLSNAME;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_MODELID;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_PHONE_SCANQRCODE;
-import static com.zjlanyun.lyapp.utils.UtilConstants.REQUESTCODE_CREATE;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_ACTID;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_ACTION;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_BILLSNAME;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_MODELID;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_PHONE_SCANQRCODE;
+import static com.zjlanyun.lyapp.config.UtilConstants.REQUESTCODE_CREATE;
 
 
 public class TreeActivity extends BaseActivity {
@@ -101,6 +98,7 @@ public class TreeActivity extends BaseActivity {
     private List<IrSearchFields> irSearchFieldsList; //搜索字段
     private int act_id = 0;//窗口ID
     private long model_id = 0; //模型ID
+    private boolean isMore = true;
     private String title;//title名
     private boolean hasSearch = false; //是否有搜索功能
     private PopupWindow searchWindow;//搜索框POPWINDOW
@@ -113,13 +111,12 @@ public class TreeActivity extends BaseActivity {
     private long currentFocusFieldsID = 0;//当前焦点ID
     private boolean showLoading = true;
     private boolean isLoading = false;//是否正在加载数据
-    private boolean isMore = true;//是否有更多数据
     private int page = 1;//当前页
     private List<IrModelFields> irModelFieldsList;
     private IrActWindow irActWindow;
     private TreeAdapter treeAdapter;
     private GridLayoutManager gridLayoutManager;
-
+    private IrModelFields irModelFieldsKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +159,17 @@ public class TreeActivity extends BaseActivity {
             Toasty.info(mContext, "单据尚未配置字段，请检查配置！", Toast.LENGTH_SHORT, true).show();
             return;
         }
+        if (Common.isFormView(mContext,VIEW_TYPE_TREE,model_id) == null){
+            Toasty.info(mContext, "请配置主键字段！", Toast.LENGTH_SHORT, true).show();
+        }
+        else {
+            irModelFieldsKey = Common.isFormView(mContext,VIEW_TYPE_TREE,model_id);
+        }
+
+
+
+
+
 
         gridLayoutManager = new GridLayoutManager(TreeActivity.this, 1);
         rvList.setLayoutManager(gridLayoutManager);
@@ -193,6 +201,7 @@ public class TreeActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toasty.info(mContext, "点击！", Toast.LENGTH_SHORT, true).show();
+                onItemBillsClick(position);
             }
         });
     }
@@ -327,13 +336,24 @@ public class TreeActivity extends BaseActivity {
     /**
      * 点击单据
      */
-    private void onItemClick() {
+    private void onItemBillsClick(int position) {
         if (irActWindow.getView_mode().indexOf(VIEW_TYPE_FORM) != -1) {
             Intent intent = new Intent(mContext, FormActivity.class);
+            if (irModelFieldsKey.getTtype().equals("int")) {
+                intent.putExtra(irModelFieldsKey.getName(), String.valueOf(mList.get(position).get(irModelFieldsKey.getName())));
+            } else if (irModelFieldsKey.getTtype().equals("string")) {
+                intent.putExtra(irModelFieldsKey.getName(), (String) mList.get(position).get(irModelFieldsKey.getName()));
+            } else {
+                Toasty.info(mContext, "主键字段类型配置错误！", Toast.LENGTH_SHORT, true).show();
+                return;
+            }
+            intent.putExtra("key_name", irModelFieldsKey.getName());
             intent.putExtra(ACTIVITY_INTENT_MODELID, model_id);
-            intent.putExtra(ACTIVITY_INTENT_ACTION, ACTION_CREATE);
+            intent.putExtra(ACTIVITY_INTENT_ACTION, ACTION_READ);
             intent.putExtra(ACTIVITY_INTENT_ACTID, act_id);
+            Logger.t(TAG).d(irModelFieldsKey.getName()+"///"+mList.get(position).get(irModelFieldsKey.getName()));
             startActivityForResult(intent, REQUESTCODE_CREATE);
+
         }
     }
 

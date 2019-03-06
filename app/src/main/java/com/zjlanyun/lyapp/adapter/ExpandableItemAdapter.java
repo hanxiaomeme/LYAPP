@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.zjlanyun.lyapp.R;
 import com.zjlanyun.lyapp.activity.TreeActivity;
@@ -15,13 +14,11 @@ import com.zjlanyun.lyapp.entity.Level1Item;
 import com.zjlanyun.lyapp.entity.LevelEndItem;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import es.dmoral.toasty.Toasty;
 
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_ACTID;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_BILLSNAME;
-import static com.zjlanyun.lyapp.utils.UtilConstants.ACTIVITY_INTENT_MODELID;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_ACTID;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_BILLSNAME;
 
 /**
  * Created by MDZZ on 2019-02-27.
