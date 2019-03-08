@@ -130,8 +130,6 @@ public class LoginActivity extends BaseActivity {
      * 登录
      */
     private void login() {
-//        KeyboardUtils.hideSoftInput(mActivity);
-
         str_user = etUsername.getText().toString().trim();
         str_pass = etPassword.getText().toString().trim();
         if (str_user.isEmpty()){
