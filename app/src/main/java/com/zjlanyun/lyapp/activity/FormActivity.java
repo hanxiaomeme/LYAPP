@@ -1657,7 +1657,7 @@ public class FormActivity extends BaseActivity {
                 if (hasFocus) {
                     // 此处为得到焦点时的处理内容
                     focus_field_id = irModelFields.getId();
-                    Logger.t("当前焦点的ID").d(focus_field_id);
+
                 } else {
                 }
             }
@@ -1722,6 +1722,7 @@ public class FormActivity extends BaseActivity {
      * 打开扫描界面扫描条形码或二维码扫描字段
      */
     private void openScan() {
+        //先判断是否为PDA，再判断该字段是否有选单功能，如果有选单功能，直接进行选单
         if (!ButtonUtils.isFastDoubleClick((int) curFieldId)) {
             Intent openCameraIntent = new Intent(mContext, CaptureActivity.class);
             openCameraIntent.putExtra("from", FormActivity.class.getName().toString());
@@ -1729,14 +1730,7 @@ public class FormActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 打开扫描界面扫描条形码或二维码选单
-     */
-    private void ChoiceDocument() {
-        Intent openCameraIntent = new Intent(mContext, CaptureActivity.class);
-        openCameraIntent.putExtra("from", FormActivity.class.getName().toString());
-        startActivityForResult(openCameraIntent, REQUESTCODE_CAMERA_CHOICE);
-    }
+
 
     //表头、表体切换
     @OnClick(R.id.btn_1)
