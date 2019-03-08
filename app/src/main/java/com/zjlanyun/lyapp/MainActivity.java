@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
+    //测试提交
     private final String TAG = "MainActivity";
     @BindView(R.id.fragment)
     FrameLayout fragment;
