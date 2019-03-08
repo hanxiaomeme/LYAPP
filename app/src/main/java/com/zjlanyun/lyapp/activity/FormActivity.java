@@ -188,7 +188,6 @@ public class FormActivity extends BaseActivity {
 
     MenuItem addMenuItem;
 
-    private String deviceModel = Build.MODEL; //设备名称
 
     /**
      * 选单需要带入数据的map
@@ -221,10 +220,6 @@ public class FormActivity extends BaseActivity {
     private List<IrModelFields> irModelFieldsOne2ManyListTemp = null;
 
     /**
-     * 菜单视图模型
-     */
-    private IrUiMenu irUiMenu = null;
-    /**
      * one2many主键字段
      */
     private IrModelFields irModelFieldsOne2ManyKey;
@@ -244,10 +239,7 @@ public class FormActivity extends BaseActivity {
      * 模型ID
      */
     private long model_id = 0;
-    /**
-     * 现表中需要与选单返回的json数据对比的字段
-     */
-    private String unique_field = "";
+
     /**
      * 表头字段list，不含one2many
      */
@@ -269,10 +261,6 @@ public class FormActivity extends BaseActivity {
      */
     private ArrayList<ArrayList<String>> choiceListData;
 
-    /**
-     * 当前设备是否是PDA
-     */
-    private boolean isPDA = false;
     /**
      * 是否使用扫描
      */
@@ -381,10 +369,7 @@ public class FormActivity extends BaseActivity {
      * 记录many2one字段是否从更多列表点击进来的
      */
     private HashMap<Long, Boolean> many2oneOriginMore;
-    /**
-     * 选单功能配置参数
-     */
-    private IrExtend irExtendChoiceBill = null;
+
 
     /**
      * 是否正在请求中
@@ -402,10 +387,7 @@ public class FormActivity extends BaseActivity {
      * 是否点击表体信息
      */
     private boolean isClickBody = false;
-    /**
-     * 是否点击表格
-     */
-    private boolean isClickTable = false;
+
     /**
      * 是否由保存得来
      */
@@ -426,30 +408,10 @@ public class FormActivity extends BaseActivity {
      * 是否从更多点击获取值
      */
     private boolean isMoreListEnter = false;
-    /**
-     * 单据中是否有扫描字段
-     */
-    private boolean isHaveScanFields = false;
-    /**
-     * 是否允许请求更多数据
-     */
-    private boolean isGetMore = false;
-    /**
-     * 选单是否填充数据
-     */
-    private boolean choiceBillTianChong = false;
-    /**
-     * 该字段是否为自动选单
-     */
-    private boolean isAutoBill = false;
-    /**
-     * 单据中是否有需要在表格中合计的字段
-     */
-    private boolean isSummary = false;
-    /**
-     * many2one输入框中内容初始长度
-     */
-    private int many2oneTvLength = 0;
+
+
+
+
     /**
      * 字段id与字段名对应的map
      */
@@ -528,6 +490,7 @@ public class FormActivity extends BaseActivity {
 
     /**
      * 初始化toolbar菜单
+     *
      * @param menu
      * @return
      */
@@ -592,6 +555,7 @@ public class FormActivity extends BaseActivity {
 
     /**
      * 再提交审核之前，检查表体是否有必填字段未输入
+     *
      * @return
      */
     public boolean checkBodyFieldInput() {
@@ -605,7 +569,7 @@ public class FormActivity extends BaseActivity {
                         HashMap<String, Object> map = bodyList.get(j);
                         String value = "";
                         if (map.containsKey(field.getName())) {
-                          value = map.get(field.getName()).toString();
+                            value = map.get(field.getName()).toString();
                         }
                         if (TextUtils.isEmpty(value)) {
                             msg = "表体 " + field.getField_desc() + " 必须填写，保存失败";
@@ -622,6 +586,7 @@ public class FormActivity extends BaseActivity {
 
     /**
      * 保存表头数据
+     *
      * @return
      */
     private boolean saveHeaderData() {
@@ -885,7 +850,7 @@ public class FormActivity extends BaseActivity {
                 bodyItem = bodyList.get(row);
                 curRow = row;
                 isClickBody = true;
-                isClickTable = true;
+
                 //从表格内点击进来的数据，不需要将many2oneIsOnClickMap变为false
                 for (Long key : many2oneIsOnClickMap.keySet()) {
                     isWithDateMap.put(key, true);
@@ -1231,7 +1196,7 @@ public class FormActivity extends BaseActivity {
         }
         initScan(view, irModelFields, type, p);
     }
-    
+
     /**
      * 字段属性控制
      */
@@ -1745,7 +1710,6 @@ public class FormActivity extends BaseActivity {
     //初始化扫描
     private void initScan(View view, IrModelFields irModelFields, int colType, int p) {
         if (irModelFields.getScan() && colType == 0 && !isCheck) {
-            isHaveScanFields = true;
             final Button btn_scan = (Button) view.findViewById(R.id.btn_scan);
             btn_scan.setVisibility(View.VISIBLE);
             btn_scan.setTag(irModelFields.getId());
@@ -1806,13 +1770,44 @@ public class FormActivity extends BaseActivity {
     //审核
     @OnClick(R.id.btn_2)
     public void f2() {
-        Toasty.success(mContext, "审核", Toast.LENGTH_LONG, true).show();
+//        Toasty.success(mContext, "审核", Toast.LENGTH_LONG, true).show();
+        checkBill();
+    }
+
+    /**
+     * 审核单据
+     */
+    private void checkBill() {
+        //修改过的单据将不能审核，审核之前必须先点击保存
+
+        new AlertView("审核单据", "确认审核该单据吗？",
+                "取消", new String[]{"审核"}, null, mContext, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+
+            }
+        }).show();
+
     }
 
     //反审核
     @OnClick(R.id.btn_3)
     public void f3() {
-        Toasty.success(mContext, "反审核", Toast.LENGTH_LONG, true).show();
+//        Toasty.success(mContext, "反审核", Toast.LENGTH_LONG, true).show();
+        unCheckBill();
+    }
+
+    /**
+     * 反审核单据
+     */
+    private void unCheckBill() {
+        new AlertView("弃审单据", "确认弃审该单据吗？",
+                "取消", new String[]{"弃审"}, null, mContext, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+
+            }
+        }).show();
     }
 
     //保存表格数据
@@ -1851,8 +1846,7 @@ public class FormActivity extends BaseActivity {
         if (verifyList.size() == 0) {
             //数据填充完毕，保存
             savaTableData();
-        }
-        else {
+        } else {
             //发送请求，进行数据获取
             HttpRequest httpRequest = new HttpRequest(mContext, URL_FORM, true);
             httpRequest.getRequest().add("verify_fields", JSON.toJSONString(verifyList));
@@ -2038,7 +2032,7 @@ public class FormActivity extends BaseActivity {
                 cleanBodyForm();
             }
             notSave = true;
-            isClickTable = false;
+
         }
     }
 
@@ -2067,9 +2061,6 @@ public class FormActivity extends BaseActivity {
         }
         isSaveTable = false;
     }
-
-
-
 
 
     //重写键盘监听
