@@ -110,24 +110,11 @@ import static com.zjlanyun.lyapp.config.UtilConstants.SINGLE_SELECTION;
  * 配置表体视图
  */
 public class FormActivity extends BaseActivity {
-
-
     /**
      * 日志TAG
      */
     private static final String TAG = "FormActivity";
-    /**
-     *
-     */
-    private final static String SCAN_ACTION = "scan.rcv.message";
-    /**
-     * 表体选择界面
-     */
-    private static int BODY = 1;
-    /**
-     * 表头选择界面
-     */
-    private static int HEARD = 2;
+
     /**
      * 表体字段添加区域
      */
@@ -437,8 +424,6 @@ public class FormActivity extends BaseActivity {
      *
      */
     private HashMap<Long, Boolean> isWithDateMap = new HashMap<>();
-
-
     /**
      *
      */
@@ -517,7 +502,6 @@ public class FormActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     /**
      * 提交单据
      */
@@ -633,7 +617,15 @@ public class FormActivity extends BaseActivity {
      * 退出当前界面
      */
     private void back() {
-        finish();
+        new AlertView("退出", "确认退出操作该单据吗？",
+                "取消", new String[]{"退出"}, null, mContext, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                if (position == 0)
+                    finish();
+            }
+        }).show();
+
     }
 
     //初始化
@@ -1779,7 +1771,6 @@ public class FormActivity extends BaseActivity {
      */
     private void checkBill() {
         //修改过的单据将不能审核，审核之前必须先点击保存
-
         new AlertView("审核单据", "确认审核该单据吗？",
                 "取消", new String[]{"审核"}, null, mContext, AlertView.Style.Alert, new OnItemClickListener() {
             @Override
@@ -2066,7 +2057,6 @@ public class FormActivity extends BaseActivity {
     //重写键盘监听
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         return super.onKeyDown(keyCode, event);
     }
 
