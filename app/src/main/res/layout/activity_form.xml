@@ -16,6 +16,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <include layout="@layout/view_toolbar" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="单据修改之后，无法直接进行审核，需先执行保存操作！"
+                android:layout_margin="3dp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <ScrollView

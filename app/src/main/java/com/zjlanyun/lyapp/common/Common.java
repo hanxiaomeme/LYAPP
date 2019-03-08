@@ -11,6 +11,8 @@ import com.zjlanyun.lyapp.greendao.IrActWindowDao;
 import com.zjlanyun.lyapp.greendao.IrConfig;
 import com.zjlanyun.lyapp.greendao.IrExtend;
 import com.zjlanyun.lyapp.greendao.IrModel;
+import com.zjlanyun.lyapp.greendao.IrModelAccess;
+import com.zjlanyun.lyapp.greendao.IrModelAccessDao;
 import com.zjlanyun.lyapp.greendao.IrModelFields;
 import com.zjlanyun.lyapp.greendao.IrModelFieldsDao;
 import com.zjlanyun.lyapp.greendao.IrSearchFields;
@@ -230,5 +232,67 @@ public class Common {
             return irModelFieldsKey;
         }
         return null;
+    }
+
+    /**
+     * 查询单据页表头所有需要保存的字段字段
+     * @param mContext
+     * @param model_id
+     * @return
+     */
+    public static List<IrModelFields> getHeardFormAllStoreFields(Context mContext,long model_id){
+        QueryBuilder<IrModelFields> qbheard = DBHelper.getDaoSession(mContext).getIrModelFieldsDao().queryBuilder();
+        qbheard.where(IrModelFieldsDao.Properties.Model_id.eq(model_id), IrModelFieldsDao.Properties.View_type.eq("form"),
+                IrModelFieldsDao.Properties.Ttype.notEq("one2many"), IrModelFieldsDao.Properties.Store.eq(1)).
+                orderAsc(IrModelFieldsDao.Properties.Sequence);
+        return qbheard.list();
+
+
+    }
+
+    /**
+     * 查询单据页表头所有字段
+     * @param mContext
+     * @param model_id
+     * @return
+     */
+    public static List<IrModelFields> getHeardFormAllFields(Context mContext,long model_id){
+        QueryBuilder<IrModelFields> qbheard = DBHelper.getDaoSession(mContext).getIrModelFieldsDao().queryBuilder();
+        qbheard.where(IrModelFieldsDao.Properties.Model_id.eq(model_id),
+                IrModelFieldsDao.Properties.View_type.eq("form"), IrModelFieldsDao.Properties.Ttype.notEq("one2many"))
+                .orderAsc(IrModelFieldsDao.Properties.Sequence);
+        return qbheard.list();
+    }
+
+    /**
+     * 获取表体权限
+     * @param mContext
+     * @param relation_model_id
+     * @return
+     */
+    public static IrModelAccess getFromBodyModelAccess(Context mContext,long relation_model_id){
+        QueryBuilder<IrModelAccess> qb = DBHelper.getDaoSession(mContext).getIrModelAccessDao().queryBuilder();
+        qb.where(IrModelAccessDao.Properties.Model_id.eq(relation_model_id));
+        if (qb.list().size() > 0)
+            return qb.list().get(0);
+        else
+            return null;
+
+    }
+
+    /**
+     * 获取表体主键字段
+     * @param mContext
+     * @param relation_model_id
+     * @return
+     */
+    public static IrModelFields getFromBodyPrimaryKey(Context mContext,long relation_model_id){
+        QueryBuilder<IrModelFields> qb2 = DBHelper.getDaoSession(mContext).getIrModelFieldsDao().queryBuilder();
+        qb2.where(IrModelFieldsDao.Properties.Model_id.eq(relation_model_id),
+                IrModelFieldsDao.Properties.Primary_key.eq(1));
+        if (qb2.list().size()>0)
+            return qb2.list().get(0);
+        else
+            return null;
     }
 }

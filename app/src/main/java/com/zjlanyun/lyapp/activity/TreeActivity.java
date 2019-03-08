@@ -70,6 +70,8 @@ import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_GETTREEDATE;
 import static com.zjlanyun.lyapp.config.ActionConfig.ACTION_READ;
 import static com.zjlanyun.lyapp.config.ActionConfig.VIEW_TYPE_FORM;
 import static com.zjlanyun.lyapp.config.ActionConfig.VIEW_TYPE_TREE;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_KEYNAME;
+import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_KEYVALUE;
 import static com.zjlanyun.lyapp.config.WebConfig.URL_GETTREELIST;
 import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_ACTID;
 import static com.zjlanyun.lyapp.config.UtilConstants.ACTIVITY_INTENT_ACTION;
@@ -340,18 +342,17 @@ public class TreeActivity extends BaseActivity {
         if (irActWindow.getView_mode().indexOf(VIEW_TYPE_FORM) != -1) {
             Intent intent = new Intent(mContext, FormActivity.class);
             if (irModelFieldsKey.getTtype().equals("int")) {
-                intent.putExtra(irModelFieldsKey.getName(), String.valueOf(mList.get(position).get(irModelFieldsKey.getName())));
+                intent.putExtra(ACTIVITY_INTENT_KEYVALUE, String.valueOf(mList.get(position).get(irModelFieldsKey.getName())));
             } else if (irModelFieldsKey.getTtype().equals("string")) {
-                intent.putExtra(irModelFieldsKey.getName(), (String) mList.get(position).get(irModelFieldsKey.getName()));
+                intent.putExtra(ACTIVITY_INTENT_KEYVALUE, (String) mList.get(position).get(irModelFieldsKey.getName()));
             } else {
                 Toasty.info(mContext, "主键字段类型配置错误！", Toast.LENGTH_SHORT, true).show();
                 return;
             }
-            intent.putExtra("key_name", irModelFieldsKey.getName());
+            intent.putExtra(ACTIVITY_INTENT_KEYNAME, irModelFieldsKey.getName());
             intent.putExtra(ACTIVITY_INTENT_MODELID, model_id);
             intent.putExtra(ACTIVITY_INTENT_ACTION, ACTION_READ);
             intent.putExtra(ACTIVITY_INTENT_ACTID, act_id);
-            Logger.t(TAG).d(irModelFieldsKey.getName()+"///"+mList.get(position).get(irModelFieldsKey.getName()));
             startActivityForResult(intent, REQUESTCODE_CREATE);
 
         }

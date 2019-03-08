@@ -20,10 +20,16 @@ public class UtilConstants {
     public static final String ACTIVITY_INTENT_MODELID = "model_id";
     public static final String ACTIVITY_INTENT_ACTID = "act_id";
     public static final String ACTIVITY_INTENT_ACTION = "action";
+    public static final String ACTIVITY_INTENT_KEYNAME = "key_name";
+    public static final String ACTIVITY_INTENT_KEYVALUE = "key_value";
+
 
     public static final int ACTIVITY_PHONE_SCANQRCODE = 1;
     public static final int REQUESTCODE_CREATE = 2;
 
+
+    public static final int REQUESTCODE_CAMERA_FIELD = 1;//单据界面扫描字段回调
+    public static final int REQUESTCODE_CAMERA_CHOICE = 2;//单据界面选单回调
 
     public static final String FIELD_NOTCLEAN = "notclean";//字段点击保存之后不清空
     public static final String FIELD_AUTOCHOISEBILL = "autochoisebill";//字段带有选单功能

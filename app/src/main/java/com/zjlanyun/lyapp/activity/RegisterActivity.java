@@ -78,7 +78,6 @@ public class RegisterActivity extends BaseActivity {
      * 更新配置
      */
     public void updateSetting() {
-
         btUpdate.setText(getString(R.string.update_msg));
         progressBar.setVisibility(View.VISIBLE);
         btUpdate.setEnabled(false);

@@ -23,5 +23,5 @@ public class WebConfig {
     public static final String URL_GETTREELIST = "http://192.168.1.195:66/api.aspx";
 
     //获取单据列表接口（测试）
-    public static final String URL_FORM = "http://192.168.1.195:66/api.aspx";
+    public static final String URL_FORM = "http://192.168.2.190:91/api.aspx";
 }
